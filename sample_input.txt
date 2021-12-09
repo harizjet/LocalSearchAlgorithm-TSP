@@ -1,0 +1,23 @@
+6
+Medford
+Arlington
+Everett
+Cambridge
+Belmont
+Somerville
+15
+Medford Everett 9
+Medford Arlington 11
+Medford Somerville 9
+Medford Cambridge 16
+Medford Belmont 15
+Everett Cambridge 11
+Everett Somerville 6
+Everett Arlington 14
+Everett Belmont 13
+Cambridge Somerville 10
+Cambridge Arlington 15
+Cambridge Belmont 8
+Belmont Somerville 9
+Belmont Arlington 10
+Arlington Somerville 10
