@@ -1,4 +1,4 @@
-<h1>Search Algorithm Aanlysis</h1>
+<h1>Search Algorithm Analysis</h1>
 <br>
 <div>
     <h2>Algorithms Used</h2>
