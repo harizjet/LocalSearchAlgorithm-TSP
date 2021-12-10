@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
     # Great Deluge
     gd_algorithm = GreatDeluge(
-        estimation=40,
+        estimation=30,
         options=list(theMap.locations.keys()),
         cost=Cost(theMap))
     gd_algorithm.run(200)
