@@ -1,84 +1,41 @@
 import matplotlib.pyplot as plt
 import configparser
+from utils import visual_variable
 
 
-def visualized():
+def visualized(algo_s: list) -> None:
     config = configparser.ConfigParser()
     config.read('config.ini')
 
-    fig, axes = plt.subplots(figsize=(15, 15), ncols=2, nrows=1)
+    fig, axes = plt.subplots(figsize=(15, 15), ncols=len(algo_s), nrows=1)
+    
+    for i, algo in enumerate(algo_s):
+        variable = visual_variable(algo)
+        axe = axes[i] if len(algo_s) > 1 else axes
 
-    # with open('data/result_gd.csv', 'r') as f:
-    #     losses_gd = [t.split(',') for t in f.read().split('\n')]
-    # axes[0].plot(range(1, len(losses_gd) + 1),
-    #              list(map(int, [l[0] for l in losses_gd])),
-    #              color='red',
-    #              alpha=0.5,
-    #              label='accepted_cost',
-    #              linewidth=3)
-    # axes[0].plot(range(1, len(losses_gd) + 1),
-    #              list(map(int, [l[1] for l in losses_gd])),
-    #              color='blue',
-    #              alpha=0.3,
-    #              label='best_cost',
-    #              linewidth=3)
-    # axes[0].set_title('Loss curve for Great Deluge' +
-    #                   '\n' +
-    #                   config.get("variable", "gd_best_sol") +
-    #                   '\n' +
-    #                   'Distance: ' +
-    #                   config.get("variable", "gd_best_cost"))
-    # axes[0].set_xlabel('iteration')
-    # axes[0].set_ylabel('loss')
-    # axes[0].legend()
-
-    # with open('data/result_sa.csv', 'r') as f:
-    #     losses_sa = [t.split(',') for t in f.read().split('\n')]
-    # axes[1].plot(range(1, len(losses_sa) + 1),
-    #              list(map(int, [l[0] for l in losses_sa])),
-    #              color='red',
-    #              alpha=0.5,
-    #              label='accepted_cost',
-    #              linewidth=3)
-    # axes[1].plot(range(1, len(losses_sa) + 1),
-    #              list(map(int, [l[1] for l in losses_sa])),
-    #              color='blue',
-    #              alpha=0.3,
-    #              label='best_cost',
-    #              linewidth=3)
-    # axes[1].set_title('Loss curve for Simulated Annealing' +
-    #                   '\n' +
-    #                   config.get("variable", "sa_best_sol") +
-    #                   '\n' +
-    #                   'Distance: ' +
-    #                   config.get("variable", "sa_best_cost"))
-    # axes[1].set_xlabel('iteration')
-    # axes[1].set_ylabel('loss')
-    # axes[1].legend()
-
-    with open('data/result_tb.csv', 'r') as f:
-        losses_tb = [t.split(',') for t in f.read().split('\n')]
-    axes[1].plot(range(1, len(losses_tb) + 1),
-                 list(map(int, [l[0] for l in losses_tb])),
-                 color='red',
-                 alpha=0.5,
-                 label='accepted_cost',
-                 linewidth=3)
-    axes[1].plot(range(1, len(losses_tb) + 1),
-                 list(map(int, [l[1] for l in losses_tb])),
-                 color='blue',
-                 alpha=0.3,
-                 label='best_cost',
-                 linewidth=3)
-    axes[1].set_title('Loss curve for Tabu Search' +
-                      '\n' +
-                      config.get("variable", "tb_best_sol") +
-                      '\n' +
-                      'Distance: ' +
-                      config.get("variable", "tb_best_cost"))
-    axes[1].set_xlabel('iteration')
-    axes[1].set_ylabel('loss')
-    axes[1].legend()
+        with open(variable[0], 'r') as f:
+            losses = [t.split(',') for t in f.read().split('\n')]
+        axe.plot(range(1, len(losses) + 1),
+                     list(map(int, [l[0] for l in losses])),
+                     color='red',
+                     alpha=0.5,
+                     label='accepted_cost',
+                     linewidth=3)
+        axe.plot(range(1, len(losses) + 1),
+                     list(map(int, [l[1] for l in losses])),
+                     color='blue',
+                     alpha=0.3,
+                     label='best_cost',
+                     linewidth=3)
+        axe.set_title('Loss curve for {}'.format(variable[1]) +
+                          '\n' +
+                          config.get("variable", variable[2]) +
+                          '\n' +
+                          'Distance: ' +
+                          config.get("variable", variable[3]))
+        axe.set_xlabel('iteration')
+        axe.set_ylabel('loss')
+        axe.legend()
 
     plt.show()
 

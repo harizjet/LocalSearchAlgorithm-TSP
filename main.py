@@ -11,9 +11,10 @@ import sys
 if __name__ == '__main__':
 
     if len(sys.argv) > 1:
-        algo = sys.argv[1]
+        run_n = int(sys.argv[1])
+        algos = sys.argv[2:]
     else:
-        raise Exception("Wrong argument, please select an algorithm.")
+        raise Exception("Wrong argument")
 
     theMap = Map()
     for _ in range(int(input())):
@@ -31,13 +32,13 @@ if __name__ == '__main__':
     config = configparser.ConfigParser()
     config['variable'] = {}
 
-    if algo == 'gd':
+    if 'gd' in algos:
         # Great Deluge
         gd_algorithm = GreatDeluge(
             estimation=30,
             options=list(theMap.locations.keys()),
             cost=Cost(theMap))
-        gd_algorithm.run(200)
+        gd_algorithm.run(run_n)
         resAccGD = gd_algorithm.acceptList
         resBesGD = gd_algorithm.bestList
         config['variable']['gd_best_sol'] = '->'.join(gd_algorithm.bestSol)
@@ -45,14 +46,15 @@ if __name__ == '__main__':
 
         with open('data/result_gd.csv', 'w') as f:
             f.write('\n'.join([','.join([str(x), str(y)]) for x, y in zip(resAccGD, resBesGD)]))
-    elif algo == 'sa':
+
+    if 'sa' in algos:
         # Simulated Annealing
         sa_algorithm = SimulatedAnnealing(
             ini_temp=10,
             fin_temp=1,
             options=list(theMap.locations.keys()),
             cost=Cost(theMap))
-        sa_algorithm.run(200)
+        sa_algorithm.run(run_n)
         resAccSA = sa_algorithm.acceptList
         resBesSA = sa_algorithm.bestList
         config['variable']['sa_best_sol'] = '->'.join(sa_algorithm.bestSol)
@@ -63,13 +65,14 @@ if __name__ == '__main__':
 
         with open('config.ini', 'w') as configfile:
             config.write(configfile)
-    elif algo == 'tb':
+
+    if 'tb' in algos:
         # Tabu Search
         tb_algorithm = TabuSearch(
             tabu_size=2,
             options=list(theMap.locations.keys()),
             cost=Cost(theMap))
-        tb_algorithm.run(40)
+        tb_algorithm.run(run_n)
         resAccTB = tb_algorithm.acceptList
         resBesTB = tb_algorithm.bestList
         config['variable']['tb_best_sol'] = '->'.join(tb_algorithm.bestSol)
@@ -80,6 +83,11 @@ if __name__ == '__main__':
 
         with open('config.ini', 'w') as configfile:
             config.write(configfile)
-    else:
+
+    if not config['variable']:
         raise Exception('Wrong algo selected.')
-    visualized()
+    
+    with open('config.ini', 'w') as configfile:
+        config.write(configfile)
+
+    visualized(algos)
