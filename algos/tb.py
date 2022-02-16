@@ -1,5 +1,7 @@
 from cost import Cost
 import numpy as np
+import math
+from typing import Tuple
 
 
 class TabuSearch(object):
@@ -21,31 +23,36 @@ class TabuSearch(object):
         return list(np.random.choice(options,
                                      self.length,
                                      replace=False))
-    
-    def swap(self, cur_sol: list, number=2) -> list:
-        t1 = np.random.choice(range(self.length),
-                              number,
-                              replace=False)
-        t2 = np.random.choice(range(self.length),
-                              number,
-                              replace=False)
-        for f, s in zip(t1, t2):
-            cur_sol[f], cur_sol[s] = \
-                cur_sol[s], cur_sol[f]
 
-        return cur_sol
+    def best_swap_taboo(self, 
+                        cur_sol: list, 
+                        best_cost: int, 
+                        tabu_queue: list) -> Tuple[list, list]:
+        t_sol = cur_sol[:]
+        t_cost = math.inf
+        now_sol = None
+        now_cost = None
+        now_step = None
 
-    def adjacent_swap(self, cur_sol: list, number=1) -> list:
-        t1 = np.array(np.random.choice(range(1, self.length),
-                             number,
-                             replace=False))
+        t1 = np.arange(1, len(cur_sol))
         t2 = t1 - 1
 
         for f, s in zip(t1, t2):
-            cur_sol[f], cur_sol[s] = \
-                cur_sol[s], cur_sol[f]
+            tarray = t_sol[:]
+            tarray[f], tarray[s] = \
+                tarray[s], tarray[f]
+            tstep = [tarray[f], tarray[s]]
+            tcost = self.costFunc.cost(tarray)
+            tstep.sort()
 
-        return cur_sol
+            if tstep not in tabu_queue or tcost < best_cost:
+                if tcost < t_cost:
+                    now_sol = tarray
+                    now_cost = tcost
+                    now_step = tstep
+                    t_cost = tcost
+
+        return now_sol, now_cost, now_step
 
     def run(self, iteration: int) -> None:
         cur_sol = self.pick_random(self.options)
@@ -57,20 +64,17 @@ class TabuSearch(object):
         tabu_queue = []
 
         for _ in range(iteration):
-            ran_sol = self.adjacent_swap(cur_sol)
-            ran_cost = self.costFunc.cost(ran_sol)
-            cur_cost = self.costFunc.cost(cur_sol)
+            now_sol, now_cost, now_step = self.best_swap_taboo(cur_sol, best_cost, tabu_queue)
+            cur_sol = now_sol
 
-            if ran_sol not in tabu_queue or ran_cost < cur_cost:
-                cur_sol = ran_sol
-                if len(tabu_queue) == self.tabu_size:
-                    tabu_queue.pop(0)
-                tabu_queue.append(cur_sol)
-            
-                if ran_cost < best_cost:
-                    best_sol = ran_sol
-                    best_cost = ran_cost
-            
+            if len(tabu_queue) == self.tabu_size:
+                tabu_queue.pop(0)
+            tabu_queue.append(now_step)
+        
+            if now_cost < best_cost:
+                best_sol = now_sol
+                best_cost = now_cost
+
             self.acceptList.append(self.costFunc.cost(cur_sol))
             self.bestList.append(best_cost)
 
