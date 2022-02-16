@@ -24,7 +24,7 @@ class GreatDeluge(object):
                                      self.length,
                                      replace=False))
 
-    def swap(self, number=2):
+    def swap(self, cur_sol: list, number=2) -> list:
         t1 = np.random.choice(range(self.length),
                               number,
                               replace=False)
@@ -32,8 +32,24 @@ class GreatDeluge(object):
                               number,
                               replace=False)
         for f, s in zip(t1, t2):
-            self.estimation[f], self.estimation[s] = \
-                self.estimation[s], self.estimation[f]
+            cur_sol[f], cur_sol[s] = \
+                cur_sol[s], cur_sol[f]
+
+        return cur_sol
+
+    def adjacent_swap(self, cur_sol: list) -> list:
+        cur_sol = cur_sol[:]
+
+        t1 = np.array(np.random.choice(range(1, self.length),
+                             1,
+                             replace=False))
+        t2 = t1 - 1
+
+        for f, s in zip(t1, t2):
+            cur_sol[f], cur_sol[s] = \
+                cur_sol[s], cur_sol[f]
+
+        return cur_sol 
 
     def run(self, iteration: int):
         cur_sol = self.pick_random(self.options)
