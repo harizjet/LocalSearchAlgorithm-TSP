@@ -1,10 +1,11 @@
 <h1>Search Algorithm Analysis</h1>
 <br>
 <div>
-    <h2>Algorithms Used</h2>
+    <h2>Algorithms:</h2>
     <ol>
         <li>Simulated Annealing</li>
         <li>Great Deluge</li>
+        <li>Taboo Search</li>
     </ol>
 </div>
 <br>
