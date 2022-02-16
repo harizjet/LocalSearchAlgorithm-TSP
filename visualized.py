@@ -32,26 +32,50 @@ def visualized():
     axes[0].set_ylabel('loss')
     axes[0].legend()
 
-    with open('data/result_sa.csv', 'r') as f:
-        losses_sa = [t.split(',') for t in f.read().split('\n')]
-    axes[1].plot(range(1, len(losses_sa) + 1),
-                 list(map(int, [l[0] for l in losses_sa])),
+    # with open('data/result_sa.csv', 'r') as f:
+    #     losses_sa = [t.split(',') for t in f.read().split('\n')]
+    # axes[1].plot(range(1, len(losses_sa) + 1),
+    #              list(map(int, [l[0] for l in losses_sa])),
+    #              color='red',
+    #              alpha=0.5,
+    #              label='accepted_cost',
+    #              linewidth=3)
+    # axes[1].plot(range(1, len(losses_sa) + 1),
+    #              list(map(int, [l[1] for l in losses_sa])),
+    #              color='blue',
+    #              alpha=0.3,
+    #              label='best_cost',
+    #              linewidth=3)
+    # axes[1].set_title('Loss curve for Simulated Annealing' +
+    #                   '\n' +
+    #                   config.get("variable", "sa_best_sol") +
+    #                   '\n' +
+    #                   'Distance: ' +
+    #                   config.get("variable", "sa_best_cost"))
+    # axes[1].set_xlabel('iteration')
+    # axes[1].set_ylabel('loss')
+    # axes[1].legend()
+
+    with open('data/result_tb.csv', 'r') as f:
+        losses_tb = [t.split(',') for t in f.read().split('\n')]
+    axes[1].plot(range(1, len(losses_tb) + 1),
+                 list(map(int, [l[0] for l in losses_tb])),
                  color='red',
                  alpha=0.5,
                  label='accepted_cost',
                  linewidth=3)
-    axes[1].plot(range(1, len(losses_sa) + 1),
-                 list(map(int, [l[1] for l in losses_sa])),
+    axes[1].plot(range(1, len(losses_tb) + 1),
+                 list(map(int, [l[1] for l in losses_tb])),
                  color='blue',
                  alpha=0.3,
                  label='best_cost',
                  linewidth=3)
-    axes[1].set_title('Loss curve for Simulated Annealing' +
+    axes[1].set_title('Loss curve for Tabu Search' +
                       '\n' +
-                      config.get("variable", "sa_best_sol") +
+                      config.get("variable", "tb_best_sol") +
                       '\n' +
                       'Distance: ' +
-                      config.get("variable", "sa_best_cost"))
+                      config.get("variable", "tb_best_cost"))
     axes[1].set_xlabel('iteration')
     axes[1].set_ylabel('loss')
     axes[1].legend()
