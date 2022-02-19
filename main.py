@@ -94,13 +94,23 @@ if __name__ == '__main__':
             options=list(theMap.locations.keys()),
             map=theMap,
             cost=Cost(theMap))
-        hs_algorithm.run(improve_count=100)
+        hs_algorithm.run(run_n, n_for_improve=False)
+        resAccHS = hs_algorithm.acceptList
+        resBesHS = hs_algorithm.bestList
+        config['variable']['hs_best_sol'] = '->'.join(hs_algorithm.bestSol)
+        config['variable']['hs_best_cost'] = str(hs_algorithm.bestCost)
+
+        with open('data/result_hs.csv', 'w') as f:
+            f.write('\n'.join([','.join([str(x), str(y)]) for x, y in zip(resAccHS, resBesHS)]))
+
+        with open('config.ini', 'w') as configfile:
+            config.write(configfile)
 
 
-    # if not config['variable']:
-    #     raise Exception('Wrong algo selected.')
+    if not config['variable']:
+        raise Exception('Wrong algo selected.')
     
-    # with open('config.ini', 'w') as configfile:
-    #     config.write(configfile)
+    with open('config.ini', 'w') as configfile:
+        config.write(configfile)
 
-    # visualized(algos)
+    visualized(algos)

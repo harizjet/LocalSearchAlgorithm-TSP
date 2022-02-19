@@ -22,8 +22,10 @@ class HarmonySearch(object):
         self.length = len(options)
         self.map = map
         self.costFunc = cost
-        self.best_sol = None
-        self.best_cost = None
+        self.acceptList = []
+        self.bestList = []
+        self.bestSol = None
+        self.bestCost = None
 
     def pick_random(self, options: list) -> list:
         return list(np.random.choice(options,
@@ -59,11 +61,11 @@ class HarmonySearch(object):
         else:
             return list(avai_city)[0]
 
-    def run(self, improve_count: int):
+    def run(self, n: int, n_for_improve=False):
         self.initialization()
         self.sort_memory()
-        i = 0
-        while i < improve_count:
+        i, plateau_n = 0, 0
+        while i < n:
             new_route = [0] * self.length
             avai_city = set(self.options.copy())
             for col in range(self.length):
@@ -88,9 +90,25 @@ class HarmonySearch(object):
             new_cost = self.costFunc.cost(new_route)
             print(new_cost, self.costFunc.cost(self.memoryHS[-1]), self.costFunc.cost(self.memoryHS[0]), i)
             if new_cost < self.costFunc.cost(self.memoryHS[-1]):
-                self.memoryHS[-1] = new_route 
+                self.memoryHS[-1] = new_route
                 self.sort_memory()
+
+                if n_for_improve:
+                    self.acceptList.append(new_cost)
+                    self.bestList.append(self.costFunc.cost(self.memoryHS[0]))
+                    i += 1
+                plateau_n = 0
+
+            if not n_for_improve:
+                self.acceptList.append(new_cost)
+                self.bestList.append(self.costFunc.cost(self.memoryHS[0]))
+
                 i += 1
 
-        self.best_sol = self.memoryHS[0]
-        self.best_cost = self.costFunc.cost(self.memoryHS[0])
+            plateau_n += 1
+
+            if plateau_n == 5000:
+                break
+
+        self.bestSol = self.memoryHS[0]
+        self.bestCost = self.costFunc.cost(self.memoryHS[0])
