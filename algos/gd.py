@@ -9,6 +9,7 @@ class GreatDeluge(object):
                  cost: Cost,
                  level=None):
 
+        super().__init__()
         self.estimation = estimation
         self.options = options
         self.length = len(options)

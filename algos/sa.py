@@ -12,6 +12,7 @@ class SimulatedAnnealing(object):
                  cost: Cost,
                  cool_rate=None):
 
+        super().__init__()
         self.ini_temp = ini_temp
         self.fin_temp = fin_temp
         self.cool_rate = cool_rate

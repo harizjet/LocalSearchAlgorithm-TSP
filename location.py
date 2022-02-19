@@ -5,8 +5,8 @@ class Location(object):
         self.place = place
         self.directions = {}
 
-    def add_direction(self, place: str, distance: int):
-        self.directions[place] = distance
+    def add_direction(self, target: str, distance: int):
+        self.directions[target] = distance
 
 
 class Map(object):

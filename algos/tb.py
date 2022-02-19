@@ -9,7 +9,8 @@ class TabuSearch(object):
                  tabu_size: int,
                  options: list,
                  cost: Cost):
-    
+
+        super().__init__()
         self.tabu_size = tabu_size
         self.options = options
         self.length = len(options)

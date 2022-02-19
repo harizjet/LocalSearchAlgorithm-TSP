@@ -1,23 +1,57 @@
-6
+10
 Medford
 Arlington
 Everett
 Cambridge
 Belmont
 Somerville
-15
+London
+Auckland
+Liverpool
+Manchester
+45
 Medford Everett 9
 Medford Arlington 11
 Medford Somerville 9
 Medford Cambridge 16
 Medford Belmont 15
+Medford London 34
+Medford Auckland 23
+Medford Liverpool 12
+Medford Manchester 13
 Everett Cambridge 11
 Everett Somerville 6
 Everett Arlington 14
 Everett Belmont 13
+Everett London 14
+Everett Auckland 14
+Everett Liverpool 16
+Everett Manchester 18
 Cambridge Somerville 10
 Cambridge Arlington 15
 Cambridge Belmont 8
+Cambridge London 10
+Cambridge Auckland 19
+Cambridge Liverpool 21
+Cambridge Manchester 25
 Belmont Somerville 9
 Belmont Arlington 10
+Belmont London 26
+Belmont Auckland 21
+Belmont Liverpool 26
+Belmont Manchester 27
 Arlington Somerville 10
+Arlington London 30
+Arlington Auckland 24
+Arlington Liverpool 13
+Arlington Manchester 15
+Somerville London 16
+Somerville Auckland 17
+Somerville Liverpool 21
+Somerville Manchester 13
+London Auckland 12
+London Liverpool 13
+London Manchester 14
+Auckland Liverpool 16
+Auckland Manchester 31
+Liverpool Manchester 21

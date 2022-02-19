@@ -3,6 +3,7 @@ from location import Map
 from algos.gd import GreatDeluge
 from algos.sa import SimulatedAnnealing
 from algos.tb import TabuSearch
+from algos.hs import HarmonySearch
 from cost import Cost
 from visualized import visualized
 import configparser
@@ -84,10 +85,22 @@ if __name__ == '__main__':
         with open('config.ini', 'w') as configfile:
             config.write(configfile)
 
-    if not config['variable']:
-        raise Exception('Wrong algo selected.')
-    
-    with open('config.ini', 'w') as configfile:
-        config.write(configfile)
+    if 'hs' in algos:
+        # Harmony Search
+        hs_algorithm = HarmonySearch(
+            hms=5,
+            hmcr=0.7,
+            par=0.2,
+            options=list(theMap.locations.keys()),
+            map=theMap,
+            cost=Cost(theMap))
+        hs_algorithm.run(improve_count=100)
 
-    visualized(algos)
+
+    # if not config['variable']:
+    #     raise Exception('Wrong algo selected.')
+    
+    # with open('config.ini', 'w') as configfile:
+    #     config.write(configfile)
+
+    # visualized(algos)
