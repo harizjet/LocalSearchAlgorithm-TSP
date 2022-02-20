@@ -1,4 +1,4 @@
-<h1>Search Algorithm Analysis</h1>
+<h1>Local Search Algorithm</h1>
 <br>
 <div>
     <h2>Algorithms:</h2>
@@ -6,6 +6,7 @@
         <li>Simulated Annealing</li>
         <li>Great Deluge</li>
         <li>Taboo Search</li>
+        <li>Harmony Search</li>
     </ol>
 </div>
 <br>
