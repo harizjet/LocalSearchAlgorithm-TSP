@@ -62,21 +62,29 @@ class HarmonySearch(object):
             return list(avai_city)[0]
 
     def run(self, n: int, n_for_improve=False):
+        # generate feasible solution
         self.initialization()
+        # sort the memory
         self.sort_memory()
+
+        # while haven't reach target
         i, plateau_n = 0, 0
         while i < n:
             new_route = [0] * self.length
             avai_city = set(self.options.copy())
+
+            # for every col in solution
             for col in range(self.length):
                 city = None
 
+                # generate a number between 0 and 1 and compare with HMCR value
                 pHMCR = random.random()
                 if pHMCR < self.hmcr:
-                    # pick a available city in HS memory
+                    # pick an available city in HS memory for that col
                     tSet = set(self.memoryHS[:,col: col+1].squeeze().tolist())
                     city = self.pick_avai_city(avai_city, tSet)
 
+                    # generate a number between 0 and 1 and compare with PAR value
                     pPAR = random.random()
                     if pPAR < self.par:
                         # mutation by select closest city from the selected city
@@ -84,30 +92,40 @@ class HarmonySearch(object):
                 else:
                     # pick a city randomly
                     city = random.choice(list(avai_city))
+
+                # added the city and remove from the available city
                 new_route[col] = city
                 avai_city.remove(city)
 
+            # calculate the fitness of the solution
             new_cost = self.costFunc.cost(new_route)
+            # debugging
             print(new_cost, self.costFunc.cost(self.memoryHS[-1]), self.costFunc.cost(self.memoryHS[0]), i)
+            # check if the fitness value is better than the fitness value of the lowest solution in memory
             if new_cost < self.costFunc.cost(self.memoryHS[-1]):
                 self.memoryHS[-1] = new_route
                 self.sort_memory()
 
+                # check if the n is used for improving count
                 if n_for_improve:
                     self.acceptList.append(new_cost)
                     self.bestList.append(self.costFunc.cost(self.memoryHS[0]))
                     i += 1
+                # reset the plateau value
                 plateau_n = 0
 
+            # check if the n is used for iteration count
             if not n_for_improve:
                 self.acceptList.append(new_cost)
                 self.bestList.append(self.costFunc.cost(self.memoryHS[0]))
 
                 i += 1
 
+            # increase the plateau value
             plateau_n += 1
 
-            if plateau_n == 5000:
+            # quit if the plateau value hit
+            if plateau_n == n * 10:
                 break
 
         self.bestSol = self.memoryHS[0]

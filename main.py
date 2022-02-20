@@ -88,13 +88,13 @@ if __name__ == '__main__':
     if 'hs' in algos:
         # Harmony Search
         hs_algorithm = HarmonySearch(
-            hms=5,
+            hms=10,
             hmcr=0.7,
             par=0.2,
             options=list(theMap.locations.keys()),
             map=theMap,
             cost=Cost(theMap))
-        hs_algorithm.run(run_n, n_for_improve=False)
+        hs_algorithm.run(run_n, n_for_improve=True)
         resAccHS = hs_algorithm.acceptList
         resBesHS = hs_algorithm.bestList
         config['variable']['hs_best_sol'] = '->'.join(hs_algorithm.bestSol)
