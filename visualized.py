@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import configparser
-from utils import visual_variable
+from utils.utils import visual_variable
 
 
 def visualized(algo_s: list) -> None:

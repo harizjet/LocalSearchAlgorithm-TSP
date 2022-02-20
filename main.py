@@ -91,6 +91,7 @@ if __name__ == '__main__':
             hms=10,
             hmcr=0.7,
             par=0.2,
+            reset_n=run_n*10,
             options=list(theMap.locations.keys()),
             map=theMap,
             cost=Cost(theMap))

@@ -10,6 +10,7 @@ class HarmonySearch(object):
                  hms: int, 
                  hmcr: float, 
                  par: float, 
+                 reset_n: int,
                  options: list,
                  map: Map,
                  cost: Cost):
@@ -18,6 +19,7 @@ class HarmonySearch(object):
         self.hms = hms
         self.hmcr = hmcr
         self.par = par
+        self.reset_n = reset_n
         self.options = options
         self.length = len(options)
         self.map = map
@@ -69,6 +71,7 @@ class HarmonySearch(object):
 
         # while haven't reach target
         i, plateau_n = 0, 0
+        bestSol = self.memoryHS[0]
         while i < n:
             new_route = [0] * self.length
             avai_city = set(self.options.copy())
@@ -103,30 +106,36 @@ class HarmonySearch(object):
             print(new_cost, self.costFunc.cost(self.memoryHS[-1]), self.costFunc.cost(self.memoryHS[0]), i)
             # check if the fitness value is better than the fitness value of the lowest solution in memory
             if new_cost < self.costFunc.cost(self.memoryHS[-1]):
+                # replace the bad solution with the new one
                 self.memoryHS[-1] = new_route
+                # sort back the memory
                 self.sort_memory()
+
+                # save if the solution is better than the global
+                if self.costFunc.cost(self.memoryHS[0]) < self.costFunc.cost(bestSol):
+                    bestSol = self.memoryHS[0]
 
                 # check if the n is used for improving count
                 if n_for_improve:
                     self.acceptList.append(new_cost)
-                    self.bestList.append(self.costFunc.cost(self.memoryHS[0]))
+                    self.bestList.append(self.costFunc.cost(bestSol))
                     i += 1
                 # reset the plateau value
                 plateau_n = 0
+            else:
+                # increase the plateau value
+                plateau_n += 1
 
             # check if the n is used for iteration count
             if not n_for_improve:
                 self.acceptList.append(new_cost)
-                self.bestList.append(self.costFunc.cost(self.memoryHS[0]))
-
+                self.bestList.append(self.costFunc.cost(bestSol))
                 i += 1
 
-            # increase the plateau value
-            plateau_n += 1
+            # # reset the memory if plateau value hit
+            if plateau_n == self.reset_n:
+                self.initialization()
+                self.sort_memory()
 
-            # quit if the plateau value hit
-            if plateau_n == n * 10:
-                break
-
-        self.bestSol = self.memoryHS[0]
-        self.bestCost = self.costFunc.cost(self.memoryHS[0])
+        self.bestSol = bestSol
+        self.bestCost = self.costFunc.cost(bestSol)
